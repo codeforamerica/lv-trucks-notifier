@@ -13,6 +13,7 @@
         "nodemailer": "0.5.x",
         "request-json": "0.4.x",
         "requireindex": "1.0.x",
+        "sendgrid": "0.3.x",
         "when": "2.3.x"
     },
     "repository": {

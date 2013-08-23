@@ -1,13 +1,14 @@
+var config       = require('./config')
+
 var PORT         = 8000,
-    express      = require('express'),
+//    express      = require('express'),
     path         = require('path'),
     moment       = require('moment'),
     nodemailer      = require('nodemailer'),
 //    emailTemplates  = require('email-templates'),
     requestJSON  = require('request-json'),
+    sendgrid     = require('sendgrid')(config.SENDGRID_USERNAME, config.SENDGRID_PASSWORD)
     when         = require('when')
-
-var config       = require('./config')
 
 var TODAY        = moment().startOf('day')
 
@@ -25,6 +26,7 @@ if (TODAY.isAfter(moment(config.DATE_PROGRAM_END), 'day')) {
 }
 
 // Node.js express server setup
+/*
 var app = express()
 
 app.configure(function() {
@@ -35,6 +37,7 @@ app.configure(function() {
 app.listen(app.get('port'), function () {
 	console.log('Useless web server: Listening on port ' + app.get('port'))
 })
+*/
 
 
 // **********************************************************************
@@ -58,6 +61,7 @@ when(_getAllData(dataSources),
 		data.locations = _doLocationData(data.locations)
 		data.vendors   = _doVendorData(data.vendors)
 		data.schedule  = _doScheduleData(data.timeslots)
+		data.emaillist = _doMailingList(data.vendors)
 
 		return success
 	},
@@ -72,9 +76,16 @@ when(_getAllData(dataSources),
 	// Create that output!
 	_assembleNotification()
 
-	console.log('Done')
+	// console.log(data.emaillist)
+
+	console.log('Sending emails...')
+//	for (var f = 0; f < data.emaillist.length; f++) {
+//		_sendEmail('test', data.emaillist[f])
+//	}
+	_sendEmail('test', data.emaillist)
 
 	// exit upon completion?!
+	console.log('Done')
 	process.exit()
 })
 
@@ -146,6 +157,21 @@ function _doLocationData (locations) {
 function _doVendorData (vendors) {
 
 	return vendors
+}
+
+function _doMailingList (vendors) {
+
+	var emaillist = []
+
+	for (i = 0; i < vendors.length; i++) {
+		emaillist.push(vendors[i].email)
+	}
+
+	// Test for now.
+
+	emaillist = ['saikofish@gmail.com','lou@codeforamerica.org']
+
+	return emaillist
 }
 
 function _doScheduleData (timeslots) {
@@ -265,6 +291,11 @@ function _assembleNotification () {
 	console.log('For timeslot additions, and other questions regarding the mobile food ')
 	console.log('program, please contact ' + config.EMAIL_FROM_NAME + ' at ' + config.EMAIL_FROM_ADDRESS + '.')
 	console.log(' ')
+	console.log('What is this?')
+	console.log('You are receiving this daily automated notice because of your participation in the')
+	console.log('Las Vegas Mobile Food Vendor program.  To see the latest updates to the schedule, ')
+	console.log('as well as live meter updates, visit the food truck map at http://lasvegasnevada.gov/foodtruck/')
+	console.log(' ')
 	console.log('----------------------------------------------------------------------------------')
 	console.log(' ')
 
@@ -275,3 +306,23 @@ function _pad(string) {
 	string = string + '        '
 	return string.slice(0,6)
 }
+
+
+function _sendEmail (message, to) {
+
+	console.log('Sending to ' + to)
+
+	sendgrid.send({
+		to:      'lou@codeforamerica.org',   // test email
+		bcc:     to, 
+		from:    config.EMAIL_FROM_ADDRESS,
+		subject: config.EMAIL_SUBJECT,
+		text:    message
+	}, function(err, json) {
+		if (err) { 
+			return console.error(err);
+		}
+		console.log(json);
+	});
+}
+

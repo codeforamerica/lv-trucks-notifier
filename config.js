@@ -8,6 +8,9 @@ var config = {
 	EMAIL_REPLY_TO_ADDRESS: 'bstanley@lasvegasnevada.gov',
 	EMAIL_SUBJECT: '[Las Vegas Food Trucks] Daily Schedule Notification',
 
+	SENDGRID_USERNAME: process.env.SENDGRID_USERNAME || 'app17682452@heroku.com',
+	SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD || 'qyrx04vv',
+
 	DATE_PROGRAM_START: 'August 1, 2013',
 	DATE_PROGRAM_END: 'February 1, 2014',
 
