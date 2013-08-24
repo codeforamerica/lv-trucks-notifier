@@ -2,10 +2,11 @@ var config       = require('./config')
 
 var PORT         = 8000,
 //    express      = require('express'),
+	fs           = require('fs'),
     path         = require('path'),
     moment       = require('moment'),
-    nodemailer      = require('nodemailer'),
-//    emailTemplates  = require('email-templates'),
+    nodemailer   = require('nodemailer'),
+    mustache     = require('mustache'),
     requestJSON  = require('request-json'),
     sendgrid     = require('sendgrid')(config.SENDGRID_USERNAME, config.SENDGRID_PASSWORD)
     when         = require('when')
@@ -74,19 +75,22 @@ when(_getAllData(dataSources),
 // DO STUFF WITH DATA
 
 	// Create that output!
-	_assembleNotification()
+	var contents = _assembleNotification()
 
-	// console.log(data.emaillist)
+	var emailtext = _templateText(contents)
+	var emailhtml = _templateHtml(contents)
 
+//	console.log(emailtext)
+
+	// Send emails
 	console.log('Sending emails...')
-//	for (var f = 0; f < data.emaillist.length; f++) {
-//		_sendEmail('test', data.emaillist[f])
-//	}
-	_sendEmail('test', data.emaillist)
+	for (var f = 0; f < data.emaillist.length; f++) {
+		_sendEmail(emailtext, emailhtml, data.emaillist[f])
+	}
 
 	// exit upon completion?!
-	console.log('Done')
-	process.exit()
+//	console.log('Done')
+//	process.exit()
 })
 
 
@@ -168,8 +172,8 @@ function _doMailingList (vendors) {
 	}
 
 	// Test for now.
-
-	emaillist = ['saikofish@gmail.com','lou@codeforamerica.org']
+//	emaillist = ['ryanc@codeforamerica.org','lou@codeforamerica.org']
+	emaillist = ['lou@codeforamerica.org']
 
 	return emaillist
 }
@@ -245,84 +249,91 @@ function _formatTime (date) {
 
 function _assembleNotification () {
 
-	console.log('----------------------------------------------------------------------------------')
-	console.log(' ')
-	console.log(config.APP_NAME)
-	console.log('Today\'s Schedule - ' + TODAY.format('dddd, MMMM D, YYYY'))
+	var contents = {
+		'locations': []
+	}
+	
+	contents.app_name      = config.APP_NAME
+	contents.date          = TODAY.format('dddd, MMMM D, YYYY')
+
+	contents.contact_name  = config.EMAIL_FROM_NAME
+	contents.contact_email = config.EMAIL_FROM_ADDRESS
 
 	for (var i = 0; i < data.locations.length; i ++) {
-		var hasTimes = 0
 
-		console.log(' ')
-		console.log(data.locations[i].name)
+		var location = {}
+		location.name = data.locations[i].name
+		location.schedule = []
+
+		contents.locations.push(location)
 
 		for (var j = 0; j < data.schedule.length; j ++) {
 
 			if (data.schedule[j].location_id === data.locations[i].id) {
 
-				var from = _pad(data.schedule[j].from),
-					until = _pad(data.schedule[j].until),
-					id = data.schedule[j].vendor_id,
-					vendor
+				var entry = {}
 
-				for (k = 0; k < data.vendors.length; k ++) {
-					if (id === data.vendors[k].id) {
-						vendor = data.vendors[k].name
+				entry.from   = _pad(data.schedule[j].from)
+				entry.until  = _pad(data.schedule[j].until)
+				entry.id     = data.schedule[j].vendor_id
+
+				for (var k = 0; k < data.vendors.length; k ++) {
+					if (entry.id === data.vendors[k].id) {
+						entry.vendor = data.vendors[k].name
 					}
 				}
 
-				console.log(from + ' - ' + until + ' ' + vendor)
-
-				hasTimes++
+				// assuming that i = current position on array
+				contents.locations[i].schedule.push(entry)
 
 			}
 		}
-
-		if (hasTimes === 0 ) {
-			console.log('No vendors here today.')
-		}
-
 	}
 
-	console.log(' ')
-	console.log('For timeslot swaps, please arrange directly with the other vendor. You')
-	console.log('do not need to contact the City.')
-	console.log(' ')
-	console.log('For timeslot additions, and other questions regarding the mobile food ')
-	console.log('program, please contact ' + config.EMAIL_FROM_NAME + ' at ' + config.EMAIL_FROM_ADDRESS + '.')
-	console.log(' ')
-	console.log('What is this?')
-	console.log('You are receiving this daily automated notice because of your participation in the')
-	console.log('Las Vegas Mobile Food Vendor program.  To see the latest updates to the schedule, ')
-	console.log('as well as live meter updates, visit the food truck map at http://lasvegasnevada.gov/foodtruck/')
-	console.log(' ')
-	console.log('----------------------------------------------------------------------------------')
-	console.log(' ')
+	return contents
+}
+
+function _templateText (contents) {
+
+	console.log('Creating text template...')
+	var template_text = fs.readFileSync('templates/email.txt', { encoding: 'utf8'} )
+
+	return mustache.render(template_text, contents)
+
+}
+
+function _templateHtml (contents) {
+
+	console.log('Creating HTML template...')
+	var template_html = fs.readFileSync('templates/email.html', { encoding: 'utf8'} )
+
+	return mustache.render(template_html, contents)
 
 }
 
 function _pad(string) {
-	// this is a dumb function which exists solely to make the console output pretty
+	// this exists solely to make the text output line up pretty (like a table)
 	string = string + '        '
 	return string.slice(0,6)
 }
 
 
-function _sendEmail (message, to) {
+function _sendEmail (messageText, messageHtml, to) {
 
-	console.log('Sending to ' + to)
+	log = '[Sendgrid] Sending to ' + to + ' : '
 
 	sendgrid.send({
-		to:      'lou@codeforamerica.org',   // test email
-		bcc:     to, 
-		from:    config.EMAIL_FROM_ADDRESS,
-		subject: config.EMAIL_SUBJECT,
-		text:    message
+		to:       to, 
+		from:     config.EMAIL_FROM_ADDRESS,
+		fromname: config.EMAIL_FROM_NAME,
+		subject:  config.EMAIL_SUBJECT,
+		text:     messageText,
+		html:     messageHtml
 	}, function(err, json) {
 		if (err) { 
-			return console.error(err);
+			return console.error(log + err);
 		}
-		console.log(json);
+		console.log(log + json.message);
 	});
 }
 

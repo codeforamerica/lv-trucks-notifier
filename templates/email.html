@@ -1,0 +1,36 @@
+<html><body>
+<h1>{{app_name}}</h1>
+
+<h2>Today's Schedule - {{date}}</h2>
+
+<table border='0'>
+{{#locations}}
+	<tr>
+		<td colspan='4'><h3>{{name}}</h3></td>
+	</tr>
+	{{#schedule}}
+	<tr>
+		<td>{{from}}</td>
+		<td> - </td>
+		<td>{{until}}</td>
+		<td><b>{{vendor}}</b></td>
+	</tr>
+	{{/schedule}}
+	{{^schedule}}
+	<tr>
+		<td colspan='4'>No vendors scheduled here today.</td>
+	</tr>
+	{{/schedule}}
+{{/locations}}
+</table>
+
+<h4>How to make changes</h4>
+
+<p>For timeslot swaps, please arrange directly with the other vendor. You do not need to contact the City.</p>
+
+<p>For timeslot additions, and other questions regarding the mobile food program, please contact {{contact_name}} at <a href='mailto:{{contact_email}}'>{{contact_email}}</a>.</p>
+
+<h4>What is this?</h4>
+
+<p>You are receiving this daily automated notice because of your participation in the Las Vegas Mobile Food Vendor program.  To see the latest updates to the schedule, as well as live parking meter updates, visit the food truck map at <a href='http://lasvegasnevada.gov/foodtruck/'>http://lasvegasnevada.gov/foodtruck/</a>.</p>
+</body></html>
