@@ -1,12 +1,12 @@
 var moment = require('moment')
 
 var config = {
-	APP_NAME: 'Las Vegas Mobile Food Vendor Auto-Notification System',
+	APP_NAME: 'Las Vegas Mobile Food Vendor Daily Notification System',
 
 	EMAIL_FROM_NAME: 'Brandy Stanley',
 	EMAIL_FROM_ADDRESS: 'bstanley@lasvegasnevada.gov',
 	EMAIL_REPLY_TO_ADDRESS: 'bstanley@lasvegasnevada.gov',
-	EMAIL_SUBJECT: '[Las Vegas Food Trucks] Daily Schedule Notification',
+	EMAIL_SUBJECT: '[Las Vegas Mobile Food Vendors Program] Schedule for ' + moment().format('dddd, MMMM D, YYYY'),
 
 	SENDGRID_USERNAME: process.env.SENDGRID_USERNAME,
 	SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,

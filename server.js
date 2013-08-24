@@ -172,8 +172,9 @@ function _doMailingList (vendors) {
 	}
 
 	// Test for now.
-//	emaillist = ['ryanc@codeforamerica.org','lou@codeforamerica.org']
-	emaillist = ['lou@codeforamerica.org']
+	emaillist = []
+	emaillist.push('ryanc@codeforamerica.org')
+	emaillist.push('lou@codeforamerica.org')
 
 	return emaillist
 }
