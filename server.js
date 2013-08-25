@@ -10,16 +10,17 @@ var PORT         = 8000,
     sendgrid     = require('sendgrid')(config.SENDGRID_USERNAME, config.SENDGRID_PASSWORD)
     when         = require('when')
 
-var TODAY        = moment().startOf('day')
+var TODAY        = config.TODAY
+	SCHEDULE_DAY = config.SCHEDULE_DAY
 
 console.log('Starting: ' + config.APP_NAME)
 
-// Check if today is after the end date. If so, quit!
-// To test this, set TODAY to the day after DATE_PROGRAM_END.
-// e.g TODAY = moment(config.DATE_PROGRAM_END).add('days', 1)
-if (TODAY.isAfter(moment(config.DATE_PROGRAM_END), 'day')) {
+// Check if the schedule date is after the end date. If so, quit!
+// To test this, set SCHEDULE_DAY to the day after DATE_PROGRAM_END.
+// e.g SCHEDULE_DAY = moment(config.DATE_PROGRAM_END).add('days', 1)
+if (SCHEDULE_DAY.isAfter(moment(config.DATE_PROGRAM_END), 'day')) {
 
-	console.log('Today is ' + TODAY.format('MMMM Do YYYY') + '.')
+	console.log('The schedule day is ' + SCHEDULE_DAY.format('MMMM Do YYYY') + '.')
 	console.log('The end date for this program ended on ' + moment(config.DATE_PROGRAM_END).format('MMMM Do YYYY') + '.')
 	console.log('The notifier will now exit.')
 	process.exit()
@@ -79,8 +80,13 @@ when(_getAllData(dataSources),
 	var emailtext = _templateText(contents)
 	var emailhtml = _templateHtml(contents)
 
-	// Send emails
-	_sendEmail(emailtext, emailhtml, data.emaillist)
+	if (config.SENDGRID_PASSWORD && config.SENDGRID_USERNAME) {
+		// Send emails
+		_sendEmail(emailtext, emailhtml, data.emaillist)
+	} else {
+		console.log('No Sendgrid credentials available, outputting to console instead.')
+		console.log(emailtext)
+	}
 
 	// exit upon completion?!
 //	console.log('Done')
@@ -161,12 +167,15 @@ function _doMailingList (vendors) {
 
 	var emaillist = []
 
+	// Produce email list from vendor list.
 	for (i = 0; i < vendors.length; i++) {
 		emaillist.push(vendors[i].email)
 	}
 
 	// Test for now.
 	emaillist = []
+
+	// Add additional recipients that are not on the vendor list.
 	emaillist = emaillist.concat(config.EMAIL_ADDITIONAL_RECIPIENTS)
 
 	return emaillist
@@ -181,7 +190,7 @@ function _doScheduleData (timeslots) {
 		var start = moment(timeslots[j].start_at)
 		var end = moment(timeslots[j].finish_at)
 
-		if (start.isSame(TODAY, 'day')) {
+		if (start.isSame(SCHEDULE_DAY, 'day')) {
 			schedule.push(timeslots[j])
 		}
 
@@ -248,7 +257,7 @@ function _assembleNotification () {
 	}
 	
 	contents.app_name      = config.APP_NAME
-	contents.date          = TODAY.format('dddd, MMMM D, YYYY')
+	contents.date          = SCHEDULE_DAY.format('dddd, MMMM D, YYYY')
 
 	contents.contact_name  = config.EMAIL_FROM_NAME
 	contents.contact_email = config.EMAIL_FROM_ADDRESS
