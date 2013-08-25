@@ -8,6 +8,8 @@ var config = {
 	EMAIL_REPLY_TO_ADDRESS: 'bstanley@lasvegasnevada.gov',
 	EMAIL_SUBJECT: '[Las Vegas Mobile Food Vendors Program] Schedule for ' + moment().format('dddd, MMMM D, YYYY'),
 
+	EMAIL_ADDITIONAL_RECIPIENTS:  ['lou@codeforamerica.org', 'ryanc@codeforamerica.org', 'bstanley@lasvegasnevada.gov'],
+
 	SENDGRID_USERNAME: process.env.SENDGRID_USERNAME,
 	SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
 

@@ -80,13 +80,8 @@ when(_getAllData(dataSources),
 	var emailtext = _templateText(contents)
 	var emailhtml = _templateHtml(contents)
 
-//	console.log(emailtext)
-
 	// Send emails
-	console.log('Sending emails...')
-	for (var f = 0; f < data.emaillist.length; f++) {
-		_sendEmail(emailtext, emailhtml, data.emaillist[f])
-	}
+	_sendEmail(emailtext, emailhtml, data.emaillist)
 
 	// exit upon completion?!
 //	console.log('Done')
@@ -173,8 +168,7 @@ function _doMailingList (vendors) {
 
 	// Test for now.
 	emaillist = []
-	emaillist.push('ryanc@codeforamerica.org')
-	emaillist.push('lou@codeforamerica.org')
+	emaillist = emaillist.concat(config.EMAIL_ADDITIONAL_RECIPIENTS)
 
 	return emaillist
 }
@@ -321,7 +315,9 @@ function _pad(string) {
 
 function _sendEmail (messageText, messageHtml, to) {
 
-	log = '[Sendgrid] Sending to ' + to + ' : '
+	console.log('Sending emails to ' + to + ' ...')
+
+	var log = '[Sendgrid] Sending emails : '
 
 	sendgrid.send({
 		to:       to, 
