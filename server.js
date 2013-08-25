@@ -5,7 +5,6 @@ var PORT         = 8000,
 	fs           = require('fs'),
     path         = require('path'),
     moment       = require('moment'),
-    nodemailer   = require('nodemailer'),
     mustache     = require('mustache'),
     requestJSON  = require('request-json'),
     sendgrid     = require('sendgrid')(config.SENDGRID_USERNAME, config.SENDGRID_PASSWORD)
