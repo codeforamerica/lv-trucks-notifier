@@ -262,6 +262,10 @@ function _assembleNotification () {
 	contents.contact_name  = config.EMAIL_FROM_NAME
 	contents.contact_email = config.EMAIL_FROM_ADDRESS
 
+	contents.map_url       = config.MAP_URL
+
+	console.log(contents.map_url)
+
 	for (var i = 0; i < data.locations.length; i ++) {
 
 		var location = {}

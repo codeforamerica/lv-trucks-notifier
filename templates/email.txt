@@ -23,4 +23,4 @@ For timeslot additions, and other questions regarding the mobile food program, p
 
 ### What is this? ###
 
-You are receiving this daily automated notice because of your participation in the Las Vegas Mobile Food Vendor program.  To see the latest updates to the schedule, as well as live parking meter updates, visit the food truck map at http://lasvegasnevada.gov/foodtruck/.
+You are receiving this daily automated notice because of your participation in the Las Vegas Mobile Food Vendor program.  To see the latest updates to the schedule, as well as live parking meter updates, visit the food truck map at {{&map_url}}.

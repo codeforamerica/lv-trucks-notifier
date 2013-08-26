@@ -26,7 +26,10 @@ var config = {
  	API_SERVER: 'http://lv-food-trucks.herokuapp.com/api/',
  	API_LOCATIONS: 'locations.json',
 	API_VENDORS: 'vendors.json',
-	API_TIMESLOTS: 'locations/1/time_slots/search.json?q%5Bstart_at_gt%5D=' + SCHEDULE_DAY.toJSON()
+	API_TIMESLOTS: 'locations/1/time_slots/search.json?q%5Bstart_at_gt%5D=' + SCHEDULE_DAY.toJSON(),
+
+	MAP_URL: 'http://lasvegasnevada.gov/foodtruck/'
+
 }
 
 module.exports = config
