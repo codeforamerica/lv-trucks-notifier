@@ -10,6 +10,9 @@ var PORT         = 8000,
     sendgrid     = require('sendgrid')(config.SENDGRID_USERNAME, config.SENDGRID_PASSWORD)
     when         = require('when')
 
+// Note on times: be sure to set the timezone on the server that this is running on.
+// for Heroku, type into console:
+//      heroku config:add TZ="America/Los_Angeles"
 var TODAY        = config.TODAY
 	SCHEDULE_DAY = config.SCHEDULE_DAY
 
@@ -172,8 +175,8 @@ function _doMailingList (vendors) {
 		emaillist.push(vendors[i].email)
 	}
 
-	// Test for now.
-	emaillist = []
+	// When testing, uncomment the following line to clear the email list.
+	// emaillist = []
 
 	// Add additional recipients that are not on the vendor list.
 	emaillist = emaillist.concat(config.EMAIL_ADDITIONAL_RECIPIENTS)
