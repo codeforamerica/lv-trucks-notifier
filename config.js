@@ -9,9 +9,9 @@ var config = {
 
 	SCHEDULE_DAY: SCHEDULE_DAY,
 
-	EMAIL_FROM_NAME: 'Brandy Stanley',
-	EMAIL_FROM_ADDRESS: 'bstanley@lasvegasnevada.gov',
-	EMAIL_REPLY_TO_ADDRESS: 'bstanley@lasvegasnevada.gov',
+	EMAIL_FROM_NAME: 'City of Las Vegas Parking Services',
+	EMAIL_FROM_ADDRESS: 'clvfoodtruck@lasvegasnevada.gov',
+	EMAIL_REPLY_TO_ADDRESS: 'clvfoodtruck@lasvegasnevada.gov',
 	EMAIL_SUBJECT: '[Las Vegas Mobile Food Vendors Program] Schedule for ' + SCHEDULE_DAY.format('dddd, MMMM D, YYYY'),
 
 	EMAIL_ADDITIONAL_RECIPIENTS:  ['lou@codeforamerica.org', 'ryanc@codeforamerica.org', 'bstanley@lasvegasnevada.gov'],
