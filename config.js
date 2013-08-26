@@ -1,7 +1,8 @@
 var moment = require('moment')
 
 var TODAY        = moment().startOf('day'),
-	SCHEDULE_DAY = TODAY.add('days',1)
+	SCHEDULE_DAY = TODAY
+	// Note: Heroku uses UTC time, so SCHEDULE_DAY should mean "tomorrow" if sent at 5pm PST.
 
 var config = {
 	APP_NAME: 'Las Vegas Mobile Food Vendor Daily Notification System',
