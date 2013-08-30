@@ -267,8 +267,6 @@ function _assembleNotification () {
 
 	contents.map_url       = config.MAP_URL
 
-	console.log(contents.map_url)
-
 	for (var i = 0; i < data.locations.length; i ++) {
 
 		var location = {}
