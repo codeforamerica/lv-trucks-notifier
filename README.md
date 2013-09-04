@@ -22,6 +22,8 @@ This is a standalone application, but has several very important dependencies:
 
     * __Sendgrid Standard.__ This add-on uses the SendGrid e-mail service to send the schedule to participating vendors. (The City provides the vendor list to the back-end server database, and the information is exposed via an API endpoint.) Since the free tier of this add-on allows 200 e-mails a day and there is currently much less than this many vendors, we are well within its limits. It also provides some logging, which is helpful.
 
+    * __Papertrail Choklad.__ This is not required, but it will log the console's output, for later debugging.
+
 The Sendgrid account credentials are stored as variables in the Heroku process environment. If Sendgrid credentials are not detected, a text form of the e-mail is output to the console instead of being e-mailed. (Good for testing, I hope.)
 
 
