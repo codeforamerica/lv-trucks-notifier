@@ -18,7 +18,7 @@ var config = {
   SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
 
   DATE_PROGRAM_START: 'February 1, 2014',
-  DATE_PROGRAM_END: 'December 31, 2014',
+  DATE_PROGRAM_END: 'December 31, 2015',
 
   API_HOST: 'lv-food-trucks.herokuapp.com',
   API_SERVER: 'http://lv-food-trucks.herokuapp.com/api/',
