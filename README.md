@@ -45,7 +45,7 @@ There are no tests.
 
 Currently, the only "live" monitoring of the service is that the fellows and the CLV parking manager is added on as additional recipients in ```config.js```.
 
-Additional logging 
+Additional logging
 
 
 ## Usage / Installation
@@ -89,7 +89,7 @@ We use the [GitHub issue tracker][issues] to track bugs and features. Before sub
 2. Create a topic branch.
 3. Implement your feature or bug fix.
 4. Commit and push your changes.
-5. Submit a pull request. 
+5. Submit a pull request.
 
 ## Copyright
 Copyright (c) 2013 Code for America. See [LICENSE][] for details.
