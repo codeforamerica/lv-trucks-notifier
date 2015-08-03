@@ -12,7 +12,7 @@ var config = {
   EMAIL_REPLY_TO_ADDRESS: 'clvfoodtruck@lasvegasnevada.gov',
   EMAIL_SUBJECT: '[Las Vegas Mobile Food Vendors Program] Schedule for ' + SCHEDULE_DAY.format('dddd, MMMM D, YYYY'),
 
-  EMAIL_ADDITIONAL_RECIPIENTS: ['lou@codeforamerica.org', 'ryanc@codeforamerica.org', 'bstanley@lasvegasnevada.gov'],
+  EMAIL_ADDITIONAL_RECIPIENTS: ['slooker@codeforamerica.org', 'rquinn@codeforamerica.org', 'bstanley@lasvegasnevada.gov', ],
 
   SENDGRID_USERNAME: process.env.SENDGRID_USERNAME,
   SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
